@@ -152,9 +152,10 @@
     <div class="done">
       <div class="mark">✓</div>
       <h2>작성이 끝났습니다</h2>
-      <p id="d-msg">아래에서 카드 사진을 저장하거나<br>셀장님께 바로 보내 주세요.</p>
-      <div style="max-width:300px;margin:0 auto;display:grid;gap:8px">
-        <button class="btn primary" id="d-share">셀장님께 사진 보내기</button>
+      <p id="d-msg">아래 <b>카드 파일 보내기</b>를 눌러<br>셀장님께 카톡으로 전달해 주세요.</p>
+      <div style="max-width:320px;margin:0 auto;display:grid;gap:8px">
+        <button class="btn primary" id="d-file">카드 파일 보내기</button>
+        <button class="btn" id="d-share">사진으로 보내기</button>
         <button class="btn" id="d-dl">사진 저장</button>
         <button class="btn" id="d-again" style="border-color:var(--line);color:var(--ink-2)">새 카드 작성</button>
       </div>
@@ -178,7 +179,7 @@
       <button class="addbtn" id="a-csv">전체 명단 CSV로 내려받기</button>
       <button class="addbtn" id="a-backup">전체 백업 파일 내려받기 (사진 포함)</button>
       <button class="addbtn" id="a-restore">백업 파일 불러오기</button>
-      <input type="file" id="a-file" accept=".json,application/json" hidden>
+      <input type="file" id="a-file" accept=".json,application/json" multiple hidden>
       <p class="hint" style="margin-top:12px">카드는 이 기기에 저장됩니다. 기기를 바꾸거나 초기화하기 전에 반드시 백업 파일을 내려받아 두세요.</p>
       <div class="adminlink"><button id="a-exit">카드 작성 화면으로</button></div>
     </div>
@@ -357,6 +358,16 @@ function saveImage(url,name){
     document.body.appendChild(a);a.click();a.remove();toast("사진을 저장했습니다");}
   catch(e){toast("이미지를 길게 눌러 저장해 주세요");}
 }
+function shareJSON(obj,name){
+  var txt=JSON.stringify(obj,null,2), f=null;
+  try{ f=new File([new Blob([txt],{type:"application/json"})],name,{type:"application/json"}); }catch(e){}
+  if(f&&navigator.canShare&&navigator.canShare({files:[f]})){
+    navigator.share({files:[f],title:name}).catch(function(){});
+  } else {
+    download(txt,name,"application/json");
+    toast("파일을 저장했습니다. 카톡으로 보내 주세요");
+  }
+}
 function shareCanvas(cv,name){
   if(!cv||!navigator.canShare)return toast("이미지를 길게 눌러 보내 주세요");
   cv.toBlob(function(blob){
@@ -391,6 +402,9 @@ $("#b-submit").onclick=function(){
     return DB.set("card:"+id,JSON.stringify(payload)).catch(function(){}).then(function(){
       $("#d-share").onclick=function(){shareCanvas(cv,shotName)};
       $("#d-dl").onclick=function(){saveImage(shotURL,shotName)};
+      $("#d-file").onclick=function(){
+        shareJSON({kind:"cellcard",backupAt:new Date().toISOString(),count:1,items:[payload]},
+                  "셀원카드_"+(C.name||"이름")+".json")};
       show("v-done");
     });
   }).catch(function(){toast("처리하지 못했습니다. 다시 시도해 주세요")})
@@ -501,22 +515,37 @@ $("#a-backup").onclick=function(){
 
 $("#a-restore").onclick=function(){$("#a-file").click()};
 $("#a-file").onchange=function(e){
-  var f=e.target.files&&e.target.files[0]; if(!f)return;
-  var fr=new FileReader();
-  fr.onload=function(){
-    try{
-      var o=JSON.parse(fr.result);
-      var items=o.items||(Array.isArray(o)?o:[o]);
-      Promise.all(items.map(function(it){
-        var id=(it.key&&it.key.indexOf("card:")===0)?it.key
-          :"card:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-        return DB.set(id,JSON.stringify(it));
-      })).then(function(){toast(items.length+"장을 불러왔습니다");loadCards()})
-        .catch(function(){toast("불러오지 못했습니다")});
-    }catch(err){toast("백업 파일 형식이 아닙니다")}
-    e.target.value="";
-  };
-  fr.readAsText(f,"utf-8");
+  var files=Array.prototype.slice.call(e.target.files||[]); if(!files.length)return;
+  var all=[], bad=0;
+  Promise.all(files.map(function(f){
+    return new Promise(function(res){
+      var fr=new FileReader();
+      fr.onload=function(){
+        try{ var o=JSON.parse(fr.result);
+          all=all.concat(o.items||(Array.isArray(o)?o:[o])); }
+        catch(err){ bad++; }
+        res();
+      };
+      fr.onerror=function(){bad++;res()};
+      fr.readAsText(f,"utf-8");
+    });
+  })).then(function(){
+    if(!all.length){toast("불러올 카드가 없습니다");e.target.value="";return;}
+    var seen={}; cards.forEach(function(c){ seen[(c.name||"")+"|"+(c.date||"")]=true });
+    var fresh=all.filter(function(it){
+      var k=(it.name||"")+"|"+(it.date||"");
+      if(seen[k])return false; seen[k]=true; return true;
+    });
+    return Promise.all(fresh.map(function(it){
+      var id="card:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      return DB.set(id,JSON.stringify(it));
+    })).then(function(){
+      toast(fresh.length+"장 추가"+(all.length-fresh.length?" · 중복 "+(all.length-fresh.length)+"장 건너뜀":"")
+        +(bad?" · 오류 "+bad+"개":""));
+      loadCards();
+    });
+  }).catch(function(){toast("불러오지 못했습니다")})
+  .then(function(){e.target.value=""});
 };
 
 $("#c-date").value=C.date; $("#c-pyear").value=C.pyear;

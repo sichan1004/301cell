@@ -163,7 +163,7 @@
     <button class="addbtn" id="i-csv">전체 CSV로 내려받기</button>
     <button class="addbtn" id="i-backup">전체 백업 파일 내려받기</button>
     <button class="addbtn" id="i-restore">백업 파일 불러오기</button>
-    <input type="file" id="i-file" accept=".json,application/json" hidden>
+    <input type="file" id="i-file" accept=".json,application/json" multiple hidden>
     <p class="hint" style="margin-top:12px">보고서는 이 기기에 저장됩니다. 기기를 바꾸거나 초기화하기 전에 백업 파일을 내려받아 두세요.</p>
   </section>
 </div>
@@ -518,22 +518,37 @@ $("#i-backup").onclick=function(){
 
 $("#i-restore").onclick=function(){$("#i-file").click()};
 $("#i-file").onchange=function(e){
-  var f=e.target.files&&e.target.files[0]; if(!f)return;
-  var fr=new FileReader();
-  fr.onload=function(){
-    try{
-      var o=JSON.parse(fr.result);
-      var items=o.items||(Array.isArray(o)?o:[o]);
-      Promise.all(items.map(function(it){
-        var id=(it.key&&it.key.indexOf("report:")===0)?it.key
-          :"report:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-        return DB.set(id,JSON.stringify(it));
-      })).then(function(){toast(items.length+"건을 불러왔습니다");loadInbox();})
-        .catch(function(){toast("불러오지 못했습니다")});
-    }catch(err){toast("백업 파일 형식이 아닙니다")}
-    e.target.value="";
-  };
-  fr.readAsText(f,"utf-8");
+  var files=Array.prototype.slice.call(e.target.files||[]); if(!files.length)return;
+  var all=[], bad=0;
+  Promise.all(files.map(function(f){
+    return new Promise(function(res){
+      var fr=new FileReader();
+      fr.onload=function(){
+        try{ var o=JSON.parse(fr.result);
+          all=all.concat(o.items||(Array.isArray(o)?o:[o])); }
+        catch(err){ bad++; }
+        res();
+      };
+      fr.onerror=function(){bad++;res()};
+      fr.readAsText(f,"utf-8");
+    });
+  })).then(function(){
+    if(!all.length){toast("불러올 보고서가 없습니다");e.target.value="";return;}
+    var seen={}; inbox.forEach(function(it){ seen[(it.cell||"")+"|"+(it.date||"")]=true });
+    var fresh=all.filter(function(it){
+      var k=(it.cell||"")+"|"+(it.date||"");
+      if(seen[k])return false; seen[k]=true; return true;
+    });
+    return Promise.all(fresh.map(function(it){
+      var id="report:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      return DB.set(id,JSON.stringify(it));
+    })).then(function(){
+      toast(fresh.length+"건 추가"+(all.length-fresh.length?" · 중복 "+(all.length-fresh.length)+"건 건너뜀":"")
+        +(bad?" · 오류 "+bad+"개":""));
+      loadInbox();
+    });
+  }).catch(function(){toast("불러오지 못했습니다")})
+  .then(function(){e.target.value=""});
 };
 })();
 </script>
