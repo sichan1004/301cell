@@ -178,7 +178,7 @@
       <button class="primary" id="m-share">카톡으로 보내기</button>
       <button class="primary" id="m-save">보관함에 저장</button>
     </div>
-    <p class="note" id="m-note">저장이 안 되면 이미지를 길게 눌러 “사진에 저장”을 선택하세요.</p>
+    <p class="note" id="m-note">카톡 앱 안의 브라우저에서는 보내기가 막힐 수 있습니다. 그럴 땐 크롬이나 사파리로 열어 주세요.</p>
   </div>
 </div>
 <div id="stage"><div class="paper" id="paper"></div></div>
@@ -367,7 +367,7 @@ $("#b-make").onclick=function(){
       $("#shot").src=shotURL;
       $("#m-save").style.display=""; $("#m-share").style.display="";
       $("#m-dl").onclick=function(){saveImage(shotURL,shotName)};
-      $("#m-share").onclick=function(){shareImage(shotCanvas,shotName)};
+      $("#m-share").onclick=function(){shareDataURL(shotURL,shotName)};
       $("#modal").classList.add("on");
       b.disabled=false; b.textContent="종이 서식 만들기";
     }).catch(function(){toast("이미지를 만들지 못했습니다. 다시 시도해 주세요");
@@ -379,14 +379,24 @@ function saveImage(url,name){
     document.body.appendChild(a);a.click();a.remove();toast("사진을 저장했습니다");}
   catch(e){toast("이미지를 길게 눌러 저장해 주세요");}
 }
-function shareImage(cv,name){
-  if(!cv||!navigator.canShare) return toast("이미지를 길게 눌러 카톡에 붙여넣어 주세요");
-  cv.toBlob(function(blob){
-    var f=new File([blob],name,{type:"image/png"});
-    if(navigator.canShare({files:[f]})){
-      navigator.share({files:[f],title:name}).catch(function(){});
-    } else toast("이미지를 길게 눌러 카톡에 붙여넣어 주세요");
-  },"image/png");
+function dataURLtoFile(u,name){
+  var parts=String(u).split(","), m=(parts[0].match(/:(.*?);/)||[])[1]||"image/png";
+  var bin=atob(parts[1]), n=bin.length, arr=new Uint8Array(n);
+  while(n--) arr[n]=bin.charCodeAt(n);
+  return new File([arr],name,{type:m});
+}
+function shareDataURL(url,name){
+  if(!url) return toast("먼저 서식을 만들어 주세요");
+  var f=null;
+  try{ f=dataURLtoFile(url,name); }catch(e){}
+  if(f && navigator.canShare && navigator.canShare({files:[f]})){
+    navigator.share({files:[f],title:name}).catch(function(err){
+      if(err&&err.name!=="AbortError") toast("공유창을 열지 못했습니다. 사진을 길게 눌러 보내 주세요");
+    });
+    return;
+  }
+  saveImage(url,name);
+  toast("이 브라우저는 바로 보내기를 지원하지 않아 사진으로 저장했습니다");
 }
 $("#m-close").onclick=function(){$("#modal").classList.remove("on")};
 
@@ -460,9 +470,11 @@ $("#i-list").addEventListener("click",function(e){
   var it=inbox[+b.dataset.i], a=b.dataset.a;
   if(a==="img"){
     if(!it.png)return toast("저장된 사진이 없습니다");
+    var nm=it.title+"_"+(it.date||"")+".jpg";
     $("#shot").src=it.png; shotCanvas=null;
-    $("#m-save").style.display="none"; $("#m-share").style.display="none";
-    $("#m-dl").onclick=function(){saveImage(it.png,it.title+"_"+(it.date||"")+".jpg")};
+    $("#m-save").style.display="none"; $("#m-share").style.display="";
+    $("#m-dl").onclick=function(){saveImage(it.png,nm)};
+    $("#m-share").onclick=function(){shareDataURL(it.png,nm)};
     $("#modal").classList.add("on");
   }
   if(a==="json")download(JSON.stringify(it,null,2),it.title+"_"+(it.date||"")+".json","application/json");

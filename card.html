@@ -210,7 +210,7 @@
       <button id="m-dl">사진 저장</button>
       <button class="primary" id="m-share">공유하기</button>
     </div>
-    <p class="note">저장이 안 되면 이미지를 길게 눌러 “사진에 저장”을 선택하세요.</p>
+    <p class="note">카톡 앱 안의 브라우저에서는 보내기가 막힐 수 있습니다. 그럴 땐 크롬이나 사파리로 열어 주세요.</p>
   </div>
 </div>
 <div id="stage"><div class="paper" id="paper"></div></div>
@@ -378,13 +378,24 @@ function shareJSON(obj,name){
     toast("파일을 저장했습니다. 카톡으로 보내 주세요");
   }
 }
-function shareCanvas(cv,name){
-  if(!cv||!navigator.canShare)return toast("이미지를 길게 눌러 보내 주세요");
-  cv.toBlob(function(blob){
-    var f=new File([blob],name,{type:"image/png"});
-    if(navigator.canShare({files:[f]})) navigator.share({files:[f],title:name}).catch(function(){});
-    else toast("이미지를 길게 눌러 보내 주세요");
-  },"image/png");
+function dataURLtoFile(u,name){
+  var parts=String(u).split(","), m=(parts[0].match(/:(.*?);/)||[])[1]||"image/png";
+  var bin=atob(parts[1]), n=bin.length, arr=new Uint8Array(n);
+  while(n--) arr[n]=bin.charCodeAt(n);
+  return new File([arr],name,{type:m});
+}
+function shareDataURL(url,name){
+  if(!url) return toast("먼저 서식을 만들어 주세요");
+  var f=null;
+  try{ f=dataURLtoFile(url,name); }catch(e){}
+  if(f && navigator.canShare && navigator.canShare({files:[f]})){
+    navigator.share({files:[f],title:name}).catch(function(err){
+      if(err&&err.name!=="AbortError") toast("공유창을 열지 못했습니다. 사진을 길게 눌러 보내 주세요");
+    });
+    return;
+  }
+  saveImage(url,name);
+  toast("이 브라우저는 바로 보내기를 지원하지 않아 사진으로 저장했습니다");
 }
 $("#m-close").onclick=function(){$("#modal").classList.remove("on")};
 
@@ -393,7 +404,7 @@ $("#b-preview").onclick=function(){
   makeShot(paper(C),"셀원카드_"+(C.name||"이름")+".png").then(function(cv){
     $("#shot").src=shotURL;
     $("#m-dl").onclick=function(){saveImage(shotURL,shotName)};
-    $("#m-share").onclick=function(){shareCanvas(cv,shotName)};
+    $("#m-share").onclick=function(){shareDataURL(shotURL,shotName)};
     $("#modal").classList.add("on");
     b.disabled=false; b.textContent="미리 보기";
   }).catch(function(){toast("이미지를 만들지 못했습니다");b.disabled=false;b.textContent="미리 보기"});
@@ -410,7 +421,7 @@ $("#b-submit").onclick=function(){
     var payload={name:C.name,cell:C.cell,date:C.date||today(),at:new Date().toISOString(),
       data:JSON.parse(JSON.stringify(C)),png:cv.toDataURL("image/jpeg",0.75)};
     return DB.set("card:"+id,JSON.stringify(payload)).catch(function(){}).then(function(){
-      $("#d-share").onclick=function(){shareCanvas(cv,shotName)};
+      $("#d-share").onclick=function(){shareDataURL(shotURL,shotName)};
       $("#d-dl").onclick=function(){saveImage(shotURL,shotName)};
       $("#d-file").onclick=function(){
         shareJSON({kind:"cellcard",backupAt:new Date().toISOString(),count:1,items:[payload]},
@@ -469,8 +480,9 @@ $("#a-list").addEventListener("click",function(e){
   if(a==="img"){
     if(!c.png)return toast("저장된 사진이 없습니다");
     $("#shot").src=c.png; shotCanvas=null;
-    $("#m-dl").onclick=function(){saveImage(c.png,"셀원카드_"+(c.name||"이름")+".jpg")};
-    $("#m-share").onclick=function(){toast("이미지를 길게 눌러 보내 주세요")};
+    var nm="셀원카드_"+(c.name||"이름")+".jpg";
+    $("#m-dl").onclick=function(){saveImage(c.png,nm)};
+    $("#m-share").onclick=function(){shareDataURL(c.png,nm)};
     $("#modal").classList.add("on");
   }
   if(a==="json")download(JSON.stringify(c,null,2),"셀원카드_"+(c.name||"이름")+".json","application/json");
@@ -492,7 +504,7 @@ $("#a-sheet").onclick=function(){
   makeShot(html,"셀원카드_모음_"+today()+".png").then(function(cv){
     $("#shot").src=shotURL;
     $("#m-dl").onclick=function(){saveImage(shotURL,shotName)};
-    $("#m-share").onclick=function(){shareCanvas(cv,shotName)};
+    $("#m-share").onclick=function(){shareDataURL(shotURL,shotName)};
     $("#modal").classList.add("on");
     b.disabled=false; b.textContent="전체 카드 한 장으로 만들기";
   }).catch(function(){toast("장수가 많으면 실패할 수 있습니다. 셀로 검색해 나눠 만들어 주세요");
