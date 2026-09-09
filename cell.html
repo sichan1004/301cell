@@ -6,97 +6,156 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="301셀">
-<meta name="theme-color" content="#2C3A40">
+<meta name="theme-color" content="#0E6B60">
 <title>301셀</title>
 <style>
   :root{
-    --paper:#FAFBFB; --ink:#2C3A40; --ink-2:#5C6B71; --line:#DFE4E5;
-    --accent:#2C3A40; --accent-soft:#E4F6F3; --teal:#1DAF9F; --teal-ink:#0B5148;
-    --amber:#8A6520; --amber-bg:#FFF9EE; --amber-line:#E8CC93; --radius:10px;
+    --paper:#F6F9F8; --ink:#233238; --ink-2:#617076; --ink-3:#93A2A7; --line:#E2E9E8;
+    --accent:#2C3A40; --teal:#1DAF9F; --teal-d:#0E6B60; --teal-bg:#E4F6F3;
+    --amber:#8A6520; --amber-bg:#FFF7E8; --amber-line:#EBD3A0;
+    --rose:#8E3B3B; --rose-bg:#FDEEEE;
     --f:"Pretendard","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+    --sh:0 1px 2px rgba(35,50,56,.04), 0 4px 14px rgba(35,50,56,.05);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0;background:var(--paper);font-family:var(--f)}
-  .app{color:var(--ink);max-width:560px;margin:0 auto;padding:0 14px 96px;font-size:16px;line-height:1.55}
-  .logo{width:132px;height:31px;flex:0 0 132px;background-size:contain;background-repeat:no-repeat;
+  body{margin:0;background:var(--paper);font-family:var(--f);
+       background-image:radial-gradient(120% 55% at 50% -10%, #DCF2EE 0%, rgba(220,242,238,0) 62%);
+       background-repeat:no-repeat;background-attachment:fixed}
+  .app{color:var(--ink);max-width:560px;margin:0 auto;padding:0 15px 100px;font-size:16px;line-height:1.55}
+
+  .logo{width:126px;height:30px;flex:0 0 126px;background-size:contain;background-repeat:no-repeat;
         background-position:left center;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAAlCAMAAADybBJ0AAAAP1BMVEUAAADx8fGenp4bsJ/Y2dnf4+LZ3t2srKxo1ciqqqqc3td0dHR4eHivrq5Ox7md2tMAAAAAAAAAAAAAAAAAAAAya8iuAAAAEHRSTlMAEvf98V2hDfdo6fEPnvqXXkfMZQAABF9JREFUeNrtmI1yrCgQhbsZGpABff+33XMadJyb5NZqdmvvVqUrISoqn6d/gIj82L9sOpqsOg7/KK4/WzlNw2w2OjX8Aj3nrA0NHsSR+o9fxClbPs67dF5iA7/kpjf1q2V1G38KrNZtY5f+ben112/+5d72DQHr42WAHQdgLAUf/fH2Jgt0hugmU3donmXpXQ2Gzowu0d5xMffO7r7gMGWT/E3AmmLaVvJZtK1+7mDp2SIsKVsLUdBqQhPj4pfwq+wEPRqLajGFGGK6F+/lpV+qQMN5SeWx2ueATTrHxchxAnJoR45h2TuSxN2gqMPi5x7gS8FV3MsAjJTzixSRtLNRMgLGKFAwQSgjewYvFAQtLlqCorgn99C/DwjhKB6aVUqKXyaHDZEQiCJEiIhHuBW5YYJITIN4OJqxqqwM6NF8J13OMShiFO+xmSAGOaIyJWdSqtcUjkIMbbMUITVwFc3xBTxmyrCRmRljGsg3FSzD1hrrQ1BvCg+Kc6W48M0U6ACACyEgYaOhBs7OWQE/lJjxmfj05PDx6kQFwGpuIih/dRM/IiDFiaFTohBcJTecGM7xLAKNg3qn8lN0AjXJtuwmrmcM4rH5bBcBEXOvk00t+YEJFYwhhCd+kayBMuIoOB0BkQLoZJSRViWFRcdEwtjgjdPm2ZNvugqI16Ki+PTBFC5pOrzG9VEhSvcRUITBZCi+z9B3QDsQCJgd8PRePOuGjzjj3gE8xWL1GpNcQLoYgzoBvAitcA4GDDKY6H8WG7rcy08I+6R+QsCT6NPxOVHvAFbappWufhQEM07LSkBVvhRsYICDoCi8uCvosQdLewweKkW4+sgVAyCGcVfwRdcBV5970zZmlGrHzEIFny5bGCINL2KYpyuo9D3jMw95bU8LG/VnQelOmQpq4zeJO+BykqQyuEiEWh3XxxmQ/o2uoGcxztJLQdKr0yP83ypcyyjIT84hjYAt+23a7wCKJwd1Wytnu/IGOGJwcS96FnMK0wPQmoxzlVPWut+zPMMA9AC962IUFqF+aAub1d4AVca6IPlM1pkZw7cDMHiUurzyKnvuZCxSD8BZpz0ObgGuic1mcG9JruihoCxBwvh4wprNpHDAmRKaR9VG99ubB+A+lyiTPOflTpJsiEPZrCbWFqsnwKwLHNyXpQ8GQHRpEzCjVGNQG/7PuR91EOU6LV4zn3h26WZHoQ6XAa2Iwq1VUQ+jY6XpZSwWsCgOXeZsxm0GHmi7gk32ydc7EQGm08TeQpJLVje84aqLVSqrs7BZ6+oLwlonYCNgYFDtCjZpB+AYh5unHTDsa1SuyM52qtvXAe28KTnvT3x1uhwy6L5qUq5mCDgUnIA6M96nxg/LqomEnV1EQbpYZqyu8glgmQvo3GDcZb5v8PW8nMp7Jui+5sp6trd7ry5ZueQUbuIKN55jaY0F4fadrf4/+8+AfbFpEUnKeZm7NL2CoO/X9P/9j4z7Mrbf/m/gx37sx/5z+wsWcSZgmZ9DugAAAABJRU5ErkJggg==")}
-  .brandbar{display:flex;align-items:center;justify-content:space-between;padding:14px 0 6px}
-  .brandbar .dot{width:7px;height:7px;border-radius:50%;background:var(--teal)}
-  h2{font-size:19px;margin:16px 0 2px;letter-spacing:-.3px}
-  .rule{width:24px;height:2px;background:var(--teal);margin:9px 0 14px}
-  h3{font-size:15px;margin:20px 0 8px;color:var(--ink-2);font-weight:600}
-  .hint{font-size:13.5px;color:var(--ink-2);margin:0 0 12px;line-height:1.65}
-  .card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:13px 14px;margin-bottom:10px}
-  .card h4{margin:0 0 4px;font-size:16px}
+  .brandbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0 6px}
+  .brandbar .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);
+                 box-shadow:0 0 0 4px rgba(29,175,159,.16)}
+
+  .sync{font-size:12px;color:var(--ink-3);padding:2px 0 10px}
+  .sync.err{color:var(--rose)}
+
+  /* ── 상단 히어로 ── */
+  .hero{background:linear-gradient(135deg,#17998C 0%,#0C6257 100%);
+        border-radius:18px;padding:20px 20px 22px;color:#fff;margin-bottom:18px;
+        box-shadow:0 6px 20px rgba(14,107,96,.22);position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-30px;top:-40px;width:150px;height:150px;
+               border-radius:50%;background:rgba(255,255,255,.07)}
+  .hero .d{font-size:12.5px;color:#B6E7E0;letter-spacing:.2px}
+  .hero .t{font-size:27px;font-weight:800;letter-spacing:-.8px;margin:3px 0 2px}
+  .hero .s{font-size:13px;color:#CDEEE9}
+
+  h2{font-size:20px;margin:6px 0 0;letter-spacing:-.5px;font-weight:800}
+  .rule{width:26px;height:3px;background:var(--teal);border-radius:2px;margin:9px 0 16px}
+  h3{font-size:14.5px;margin:22px 0 9px;color:var(--ink);font-weight:700;
+     display:flex;align-items:center;gap:7px}
+  h3::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--teal)}
+  .hint{font-size:13.5px;color:var(--ink-2);margin:0 0 13px;line-height:1.7}
+
+  .card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 15px;
+        margin-bottom:10px;box-shadow:var(--sh)}
+  .card h4{margin:0 0 4px;font-size:16.5px;letter-spacing:-.3px}
   .card p{margin:0;font-size:13.5px;color:var(--ink-2)}
   .row{display:flex;align-items:center;gap:10px}
   .grow{flex:1;min-width:0}
-  .dday{flex:0 0 auto;background:var(--accent);color:#fff;font-size:13px;font-weight:700;
-        padding:5px 11px;border-radius:14px;white-space:nowrap}
-  .dday.soon{background:var(--teal);color:#08332C}
-  .tagline{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
-  .tag{font-size:12.5px;padding:5px 10px;border-radius:14px;background:var(--accent-soft);
-       color:var(--teal-ink);white-space:nowrap}
-  .tag.g{background:#EEF1F1;color:var(--ink-2)}
-  .tag.a{background:#FFF0D4;color:var(--amber)}
-  .pin{font-size:11.5px;padding:2px 8px;border-radius:10px;background:#FFE873;color:#4E4212;
-       font-weight:700;margin-right:6px}
-  .empty{text-align:center;color:var(--ink-2);font-size:13.5px;padding:30px 12px;line-height:1.7;
-         border:1px dashed var(--line);border-radius:12px;margin-bottom:10px}
-  .addbtn{width:100%;padding:13px;border:1px dashed var(--line);background:transparent;
-          border-radius:12px;font:inherit;font-size:15px;color:var(--ink-2);cursor:pointer;margin-bottom:10px}
-  .btn{padding:14px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;
+
+  .ev{position:relative;padding-left:19px}
+  .ev::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;
+              border-radius:3px;background:var(--teal)}
+  .ev.church::before{background:#5A7183}
+  .ev.past{opacity:.52}
+
+  .dday{flex:0 0 auto;background:#EEF2F3;color:var(--ink-2);font-size:12.5px;font-weight:700;
+        padding:6px 12px;border-radius:15px;white-space:nowrap}
+  .dday.soon{background:linear-gradient(135deg,#1DAF9F,#0E6B60);color:#fff;
+             box-shadow:0 2px 8px rgba(14,107,96,.28)}
+  .dday.today{background:linear-gradient(135deg,#F0A03C,#D9782A);color:#fff;
+              box-shadow:0 2px 8px rgba(217,120,42,.3)}
+
+  .tagline{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .tag{font-size:12.5px;padding:5px 11px;border-radius:14px;background:var(--teal-bg);
+       color:var(--teal-d);white-space:nowrap;font-weight:600}
+  .tag.g{background:#EFF3F3;color:var(--ink-2);font-weight:500}
+  .tag.a{background:var(--amber-bg);color:var(--amber);border:1px dashed var(--amber-line);font-weight:500}
+  .pin{font-size:11.5px;padding:3px 9px;border-radius:11px;
+       background:linear-gradient(135deg,#FFD84D,#F5B722);color:#4A3A05;font-weight:800;margin-right:7px}
+
+  .empty{text-align:center;color:var(--ink-3);font-size:13.5px;padding:26px 14px;line-height:1.75;
+         border:1.5px dashed var(--line);border-radius:14px;margin-bottom:10px;background:rgba(255,255,255,.5)}
+  .empty .ic{font-size:26px;display:block;margin-bottom:7px;opacity:.5}
+
+  .addbtn{width:100%;padding:14px;border:1.5px dashed #C9D6D4;background:rgba(255,255,255,.6);
+          border-radius:14px;font:inherit;font-size:15px;font-weight:600;color:var(--teal-d);
+          cursor:pointer;margin-bottom:12px}
+  .addbtn:active{background:var(--teal-bg)}
+  .btn{padding:15px 10px;border-radius:12px;border:1px solid var(--line);background:#fff;
        color:var(--ink-2);font:inherit;font-size:15px;font-weight:600;cursor:pointer}
-  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .btn.wide{display:block;width:100%;margin-bottom:9px}
+  .btn.primary{background:linear-gradient(135deg,#17998C,#0C6257);color:#fff;border:0;
+               box-shadow:0 3px 12px rgba(14,107,96,.25)}
+  .btn.wide{display:block;width:100%;margin-bottom:10px;text-align:center;text-decoration:none}
   .btn:disabled{opacity:.5}
-  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-  .chip{padding:9px 14px;border:1px solid var(--line);border-radius:20px;background:#fff;
+
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .chip{padding:9px 15px;border:1px solid var(--line);border-radius:20px;background:#fff;
         font:inherit;font-size:14px;color:var(--ink-2);cursor:pointer}
-  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
-  .mon{font-size:13px;color:var(--ink-2);margin:16px 0 7px;padding-bottom:5px;border-bottom:1px solid var(--line)}
-  .past{opacity:.5}
-  .money{display:flex;justify-content:space-between;font-size:14.5px;padding:6px 0;border-bottom:1px solid #EEF1F1}
-  .money b{font-variant-numeric:tabular-nums}
-  .money.in b{color:var(--teal-ink)} .money.out b{color:#8E3B3B}
-  .sum{display:flex;justify-content:space-between;font-size:16px;font-weight:700;padding:11px 0 2px}
-  .mini{font-size:12.5px;color:var(--ink-2)}
-  .rolecard{border:1px solid var(--line);border-radius:12px;background:#fff;padding:13px 14px;margin-bottom:10px}
-  .rolecard .who{font-size:14px;color:var(--teal-ink);background:var(--accent-soft);
-                 padding:3px 10px;border-radius:12px}
-  .rolecard .who.none{background:var(--amber-bg);color:var(--amber);border:1px dashed var(--amber-line)}
-  .plan{margin-top:9px;font-size:14px;color:var(--ink-2);white-space:pre-wrap}
-  .lnk{background:none;border:0;color:var(--teal-ink);font:inherit;font-size:13.5px;
-       text-decoration:underline;padding:6px 0 0;cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
 
+  .mon{display:inline-block;font-size:12.5px;font-weight:700;color:var(--teal-d);
+       background:var(--teal-bg);padding:5px 12px;border-radius:12px;margin:18px 0 9px}
+
+  /* ── 역할 ── */
+  .rc{position:relative;border:1px solid var(--line);border-radius:14px;background:#fff;
+      padding:14px 15px 14px 16px;margin-bottom:10px;box-shadow:var(--sh);overflow:hidden}
+  .rc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--rc,#1DAF9F)}
+  .rc .ic{font-size:19px;flex:0 0 auto}
+  .rc h4{margin:0;font-size:16.5px;letter-spacing:-.3px}
+  .who{font-size:13.5px;font-weight:700;padding:4px 11px;border-radius:13px;white-space:nowrap;
+       background:var(--teal-bg);color:var(--teal-d)}
+  .who.none{background:var(--amber-bg);color:var(--amber);border:1px dashed var(--amber-line);font-weight:500}
+  .plan{margin:10px 0 0;font-size:14px;color:var(--ink-2);white-space:pre-wrap;line-height:1.65}
+
+  /* ── 회비 ── */
+  .money{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;padding:9px 0;
+         border-bottom:1px solid #F0F4F3}
+  .money:last-of-type{border-bottom:0}
+  .money b{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .money.in b{color:var(--teal-d)} .money.out b{color:var(--rose)}
+  .balance{margin-top:12px;background:linear-gradient(135deg,#17998C,#0C6257);border-radius:12px;
+           padding:14px 16px;color:#fff}
+  .balance .l{font-size:12.5px;color:#B6E7E0}
+  .balance .v{font-size:24px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+  .balance .m{font-size:12.5px;color:#CDEEE9;margin-top:3px}
+  .mini{font-size:12.5px;color:var(--ink-3)}
+
+  /* ── 하단 탭 ── */
   .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;max-width:560px;margin:0 auto;
-          background:rgba(250,251,251,.97);border-top:1px solid var(--line);display:flex;
-          padding-bottom:env(safe-area-inset-bottom)}
-  .tabbar button{flex:1;border:0;background:none;font:inherit;font-size:11.5px;color:var(--ink-2);
-                 padding:9px 2px 8px;cursor:pointer;display:grid;gap:3px;justify-items:center}
-  .tabbar button .ico{font-size:19px;line-height:1}
-  .tabbar button[aria-selected="true"]{color:var(--teal-ink);font-weight:700}
+          background:rgba(255,255,255,.94);backdrop-filter:blur(12px);
+          border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+  .tabbar button{flex:1;border:0;background:none;font:inherit;font-size:11px;color:var(--ink-3);
+                 padding:10px 2px 9px;cursor:pointer;display:grid;gap:4px;justify-items:center}
+  .tabbar svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
+              stroke-linecap:round;stroke-linejoin:round}
+  .tabbar button[aria-selected="true"]{color:var(--teal-d);font-weight:800}
+  .tabbar button[aria-selected="true"] svg{stroke-width:2.1}
 
-  .sync{font-size:12px;color:var(--ink-2);padding:6px 0 2px}
-  .sync.err{color:#8E3B3B}
-
-  .sheetwrap{position:fixed;inset:0;z-index:100;background:rgba(26,30,36,.6);display:none;overflow:auto;padding:0}
+  /* ── 입력 시트 ── */
+  .sheetwrap{position:fixed;inset:0;z-index:100;background:rgba(23,35,40,.55);display:none;overflow:auto}
   .sheetwrap.on{display:block}
-  .sheet{max-width:560px;margin:40px auto 0;background:var(--paper);border-radius:16px 16px 0 0;
-         min-height:calc(100% - 40px);padding:16px 14px calc(24px + env(safe-area-inset-bottom))}
-  .sheet h3{margin:2px 0 14px;font-size:18px;color:var(--ink);font-weight:700}
-  label.f{display:block;font-size:13px;color:var(--ink-2);margin:12px 0 4px}
-  input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;
+  .sheet{max-width:560px;margin:44px auto 0;background:var(--paper);border-radius:20px 20px 0 0;
+         min-height:calc(100% - 44px);padding:8px 16px calc(26px + env(safe-area-inset-bottom))}
+  .grab{width:38px;height:4px;border-radius:2px;background:#D2DCDA;margin:0 auto 14px}
+  .sheet h3{margin:0 0 6px;font-size:19px;color:var(--ink);font-weight:800}
+  .sheet h3::before{display:none}
+  label.f{display:block;font-size:13px;color:var(--ink-2);margin:14px 0 5px;font-weight:600}
+  input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;
     font:inherit;font-size:16px;background:#fff;color:var(--ink)}
-  textarea{min-height:90px;resize:vertical}
-  input:focus,textarea:focus,select:focus{outline:2px solid var(--teal);outline-offset:-1px}
-  .sheetact{display:flex;gap:8px;margin-top:20px}
+  textarea{min-height:92px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--teal);outline-offset:-1px;border-color:var(--teal)}
+  .sheetact{display:flex;gap:8px;margin-top:22px}
   .sheetact .btn{flex:1}
-  .danger{background:#fff;border-color:#DDAFAF;color:#8E3B3B}
+  .danger{background:var(--rose-bg);border-color:#E7C4C4;color:var(--rose)}
 
-  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;z-index:150;background:var(--ink);
-         color:#fff;padding:11px 17px;border-radius:20px;font-size:13.5px;opacity:0;pointer-events:none;
-         transition:opacity .2s;max-width:88%;text-align:center;line-height:1.5}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:150;
+         background:var(--ink);color:#fff;padding:12px 18px;border-radius:22px;font-size:13.5px;
+         opacity:0;pointer-events:none;transition:opacity .2s;max-width:88%;text-align:center;
+         line-height:1.5;box-shadow:0 6px 20px rgba(0,0,0,.2)}
   .toast.on{opacity:1}
 </style>
 </head>
@@ -108,7 +167,12 @@
 
   <!-- ══ 홈 ══ -->
   <section id="v-home">
-    <h2>301셀</h2><div class="rule"></div>
+    <div class="hero">
+      <div class="d" id="hero-date"></div>
+      <div class="t">301셀</div>
+      <div class="s">함께하는교회 장년부</div>
+    </div>
+    <h3>다가오는 일정</h3>
     <div id="h-next"></div>
     <h3>이번 주 담당</h3>
     <div id="h-duty"></div>
@@ -157,10 +221,8 @@
   <section id="v-report" hidden>
     <h2>보고서</h2><div class="rule"></div>
     <p class="hint">셀 보고서는 셀장이 매주 작성합니다. 셀원 카드는 처음 한 번만 작성합니다.</p>
-    <a class="btn primary wide" style="text-align:center;text-decoration:none;display:block"
-       href="./index.html">셀 보고서 열기</a>
-    <a class="btn wide" style="text-align:center;text-decoration:none;display:block"
-       href="./card.html">셀원 카드 열기</a>
+    <a class="btn primary wide" href="./index.html">셀 보고서 열기</a>
+    <a class="btn wide" href="./card.html">셀원 카드 열기</a>
     <h3>자료 보관</h3>
     <p class="hint">공지 · 일정 · 회비는 모두 구글 시트에 저장됩니다. 앱을 지워도 자료는 남습니다.</p>
     <button class="btn wide" id="b-reload">지금 새로고침</button>
@@ -168,14 +230,20 @@
 </div>
 
 <nav class="tabbar" role="tablist">
-  <button role="tab" data-t="home" aria-selected="true"><span class="ico">🏠</span>홈</button>
-  <button role="tab" data-t="cal" aria-selected="false"><span class="ico">📅</span>일정</button>
-  <button role="tab" data-t="role" aria-selected="false"><span class="ico">🧩</span>역할</button>
-  <button role="tab" data-t="notice" aria-selected="false"><span class="ico">📢</span>공지</button>
-  <button role="tab" data-t="report" aria-selected="false"><span class="ico">📝</span>보고서</button>
+  <button role="tab" data-t="home" aria-selected="true">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V20h14V9.8"/><path d="M9.5 20v-6h5v6"/></svg>홈</button>
+  <button role="tab" data-t="cal" aria-selected="false">
+    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</button>
+  <button role="tab" data-t="role" aria-selected="false">
+    <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.2 2.5-5.2 5.5-5.2s5.5 2 5.5 5.2"/><circle cx="17.5" cy="10" r="2.4"/><path d="M15 20c0-2.4 1.4-4 3.5-4s2.5 1.3 2.5 3"/></svg>역할</button>
+  <button role="tab" data-t="notice" aria-selected="false">
+    <svg viewBox="0 0 24 24"><path d="M4 9v6h3l7 4V5L7 9H4Z"/><path d="M18 9.5a4 4 0 0 1 0 5"/></svg>공지</button>
+  <button role="tab" data-t="report" aria-selected="false">
+    <svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 16h5"/></svg>보고서</button>
 </nav>
 
 <div class="sheetwrap" id="sw"><div class="sheet">
+  <div class="grab"></div>
   <h3 id="sh-title">추가</h3>
   <div id="sh-body"></div>
   <div class="sheetact">
@@ -208,9 +276,10 @@ function daysTo(ymd){
   return Math.round((a-b)/86400000);
 }
 function ddayText(n){ return n===0?"오늘":(n>0?"D-"+n:"지남"); }
-function won(n){ var v=parseInt(String(n).replace(/[^0-9-]/g,""),10)||0;
-  return v.toLocaleString("ko-KR")+"원"; }
+function ddayCls(n){ return n===0?" today":(n>0&&n<=7?" soon":""); }
 function wonNum(n){ return parseInt(String(n).replace(/[^0-9-]/g,""),10)||0; }
+function won(n){ return wonNum(n).toLocaleString("ko-KR")+"원"; }
+function emptyBox(ic,msg){ return '<div class="empty"><span class="ic">'+ic+'</span>'+msg+'</div>'; }
 
 var DATA={공지:[],일정:[],역할:[],생일:[],회비:[]};
 var view="home", filter="전체";
@@ -224,7 +293,8 @@ function load(){
       if(!j.ok) throw new Error(j.error||"오류");
       DATA=j.data;
       try{ localStorage.setItem("cell:data",JSON.stringify(DATA)) }catch(e){}
-      $("#sync").textContent="자료를 불러왔습니다 · "+new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
+      $("#sync").textContent="자료를 불러왔습니다 · "+
+        new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
       renderAll();
     })
     .catch(function(){
@@ -254,7 +324,6 @@ document.querySelectorAll(".tabbar button").forEach(function(b){
 });
 $("#b-reload").onclick=function(){ load().then(function(){toast("새로고침했습니다")}) };
 
-/* ══ 정렬 도우미 ══ */
 function byDate(a,b){ return String(a.날짜||"").localeCompare(String(b.날짜||"")) }
 function upcoming(){
   return DATA.일정.filter(function(e){ var d=daysTo(e.날짜); return d!==null && d>=0 }).sort(byDate);
@@ -262,33 +331,37 @@ function upcoming(){
 
 /* ══ 홈 ══ */
 function renderHome(){
+  var d=new Date();
+  var days=["일","월","화","수","목","금","토"];
+  $("#hero-date").textContent=d.getFullYear()+"년 "+(d.getMonth()+1)+"월 "+d.getDate()+"일 "+days[d.getDay()]+"요일";
+
   var up=upcoming();
   $("#h-next").innerHTML = up.length ? eventCard(up[0],true)
-    : '<div class="empty">다가오는 일정이 없습니다.<br>일정 탭에서 추가해 보세요.</div>';
+    : emptyBox("📅","다가오는 일정이 없습니다.<br>일정 탭에서 추가해 보세요.");
 
   var nextCell=up.filter(function(e){return e.구분==="셀"})[0];
   if(nextCell){
-    var duty=[["간식",nextCell.간식],["찬양",nextCell.찬양],["뒷정리",nextCell.뒷정리]];
+    var duty=[["🍪 간식",nextCell.간식],["🎵 찬양",nextCell.찬양],["🧹 뒷정리",nextCell.뒷정리]];
     $("#h-duty").innerHTML='<div class="card"><p class="mini">'+esc(nextCell.날짜)+' · '+esc(nextCell.제목)+'</p>'+
-      '<div class="tagline">'+duty.map(function(d){
-        return '<span class="tag'+(d[1]?"":" a")+'">'+d[0]+' · '+esc(d[1]||"미정")+'</span>'
+      '<div class="tagline">'+duty.map(function(x){
+        return '<span class="tag'+(x[1]?"":" a")+'">'+x[0]+' · '+esc(x[1]||"미정")+'</span>'
       }).join("")+'</div></div>';
-  } else $("#h-duty").innerHTML='<div class="empty">예정된 셀모임이 없습니다.</div>';
+  } else $("#h-duty").innerHTML=emptyBox("🍪","예정된 셀모임이 없습니다.");
 
-  var m=new Date().getMonth()+1;
+  var m=d.getMonth()+1;
   var bs=DATA.생일.filter(function(b){return parseInt(b.월,10)===m})
                   .sort(function(a,b){return (parseInt(a.일,10)||0)-(parseInt(b.일,10)||0)});
   $("#h-birth").innerHTML = bs.length ? bs.map(function(b){
-    return '<div class="card"><div class="row"><span class="grow"><b>'+esc(b.이름)+'</b>'+
+    return '<div class="card"><div class="row"><span class="grow"><b>🎂 '+esc(b.이름)+'</b>'+
       ' <span class="mini">'+esc(b.월)+'월 '+esc(b.일)+'일</span></span>'+
       '<span class="tag'+(b.챙김?"":" a")+'">'+(b.챙김?"챙김 완료":"준비 필요")+'</span></div></div>';
-  }).join("") : '<div class="empty">'+m+'월 생일자가 없습니다.</div>';
+  }).join("") : emptyBox("🎂", m+"월 생일자가 없습니다.");
 
   var ns=DATA.공지.slice().sort(function(a,b){
     return (b.고정?1:0)-(a.고정?1:0) || String(b.작성일||"").localeCompare(String(a.작성일||""));
   }).slice(0,2);
   $("#h-notice").innerHTML = ns.length ? ns.map(noticeCard).join("")
-    : '<div class="empty">등록된 공지가 없습니다.</div>';
+    : emptyBox("📢","등록된 공지가 없습니다.");
 }
 
 /* ══ 일정 ══ */
@@ -296,17 +369,18 @@ function eventCard(e,big){
   var d=daysTo(e.날짜), past=(d!==null&&d<0);
   var sub=[e.시간,e.장소].filter(Boolean).join(" · ");
   var tags=[];
-  if(e.준비물) tags.push('<span class="tag g">준비물 · '+esc(e.준비물)+'</span>');
+  if(e.준비물) tags.push('<span class="tag g">🎒 '+esc(e.준비물)+'</span>');
   if(big){
-    if(e.간식) tags.push('<span class="tag">간식 · '+esc(e.간식)+'</span>');
-    if(e.찬양) tags.push('<span class="tag">찬양 · '+esc(e.찬양)+'</span>');
-    if(e.뒷정리) tags.push('<span class="tag">뒷정리 · '+esc(e.뒷정리)+'</span>');
+    if(e.간식) tags.push('<span class="tag">🍪 '+esc(e.간식)+'</span>');
+    if(e.찬양) tags.push('<span class="tag">🎵 '+esc(e.찬양)+'</span>');
+    if(e.뒷정리) tags.push('<span class="tag">🧹 '+esc(e.뒷정리)+'</span>');
   }
-  return '<div class="card'+(past?" past":"")+'" data-edit="일정" data-id="'+esc(e.id)+'">'+
+  return '<div class="card ev'+(e.구분==="교회"?" church":"")+(past?" past":"")+
+      '" data-edit="일정" data-id="'+esc(e.id)+'">'+
     '<div class="row"><span class="grow">'+
       '<h4>'+(e.구분==="교회"?'<span class="tag g">교회</span> ':"")+esc(e.제목)+'</h4>'+
       '<p>'+esc(e.날짜)+(sub?" · "+esc(sub):"")+'</p></span>'+
-      (d===null?"":'<span class="dday'+(d>=0&&d<=7?" soon":"")+'">'+ddayText(d)+'</span>')+
+      (d===null?"":'<span class="dday'+ddayCls(d)+'">'+ddayText(d)+'</span>')+
     '</div>'+
     (tags.length?'<div class="tagline">'+tags.join("")+'</div>':"")+
     (e.메모?'<p class="plan">'+esc(e.메모)+'</p>':"")+
@@ -319,7 +393,7 @@ function renderCal(){
     list=list.filter(function(e){var d=daysTo(e.날짜);return d===null||d>=0});
     if(filter!=="전체") list=list.filter(function(e){return e.구분===filter});
   }
-  if(!list.length){ $("#c-list").innerHTML='<div class="empty">해당하는 일정이 없습니다.</div>'; return; }
+  if(!list.length){ $("#c-list").innerHTML=emptyBox("📅","해당하는 일정이 없습니다."); return; }
   var out="", cur="";
   list.forEach(function(e){
     var m=String(e.날짜||"").slice(0,7);
@@ -337,31 +411,33 @@ $("#c-filter").onclick=function(e){
 };
 
 /* ══ 역할 ══ */
-var ROLE_HINT={
-  "경조사":"이번 달 생일자를 확인하고 준비해 주세요.",
-  "회계":"회비 수입과 지출을 기록해 주세요.",
-  "간식담당":"다음 모임 간식을 준비해 주세요.",
-  "야외셀":"야외 행사 장소와 진행 순서를 계획해 주세요.",
-  "찬양":"모임에서 부를 찬양을 정해 주세요.",
-  "뒷정리":"모임 후 정리 순서를 정해 주세요."
+var ROLE={
+  "경조사":  {ic:"🎂", c:"#E8734A", h:"이번 달 생일자를 확인하고 준비해 주세요."},
+  "회계":    {ic:"💰", c:"#3A7BD5", h:"회비 수입과 지출을 기록해 주세요."},
+  "간식담당":{ic:"🍪", c:"#E0A32E", h:"셀모임 간식을 준비해 주세요."},
+  "야외셀":  {ic:"⛰️", c:"#2FA36B", h:"야외 행사 장소와 진행 순서를 계획해 주세요."},
+  "찬양":    {ic:"🎵", c:"#7A5AF8", h:"모임에서 부를 찬양을 정해 주세요."},
+  "뒷정리":  {ic:"🧹", c:"#5C7A85", h:"모임 후 정리 순서를 정해 주세요."}
 };
 function renderRole(){
   var rs=DATA.역할;
   $("#r-list").innerHTML = rs.length ? rs.map(function(r){
-    return '<div class="rolecard" data-edit="역할" data-id="'+esc(r.id)+'">'+
-      '<div class="row"><span class="grow"><h4 style="margin:0;font-size:16px">'+esc(r.역할)+'</h4></span>'+
+    var meta=ROLE[r.역할]||{ic:"🧩",c:"#1DAF9F",h:""};
+    return '<div class="rc" style="--rc:'+meta.c+'" data-edit="역할" data-id="'+esc(r.id)+'">'+
+      '<div class="row"><span class="ic">'+meta.ic+'</span>'+
+      '<span class="grow"><h4>'+esc(r.역할)+'</h4></span>'+
       '<span class="who'+(r.담당자?"":" none")+'">'+esc(r.담당자||"담당자 미정")+'</span></div>'+
-      '<p class="plan">'+esc(r.계획||ROLE_HINT[r.역할]||"")+'</p></div>';
-  }).join("") : '<div class="empty">역할이 아직 없습니다.<br>구글 시트에서 “처음설정”을 실행해 주세요.</div>';
+      '<p class="plan">'+esc(r.계획||meta.h)+'</p></div>';
+  }).join("") : emptyBox("🧩","역할이 아직 없습니다.<br>구글 시트에서 “처음설정”을 실행해 주세요.");
 
   var bs=DATA.생일.slice().sort(function(a,b){
     return (parseInt(a.월,10)||0)-(parseInt(b.월,10)||0)||(parseInt(a.일,10)||0)-(parseInt(b.일,10)||0)});
   $("#r-birth").innerHTML = bs.length ? bs.map(function(b){
     return '<div class="card" data-edit="생일" data-id="'+esc(b.id)+'"><div class="row">'+
-      '<span class="grow"><b>'+esc(b.이름)+'</b> <span class="mini">'+esc(b.월)+'월 '+esc(b.일)+'일</span></span>'+
+      '<span class="grow"><b>🎂 '+esc(b.이름)+'</b> <span class="mini">'+esc(b.월)+'월 '+esc(b.일)+'일</span></span>'+
       '<span class="tag'+(b.챙김?"":" a")+'">'+(b.챙김?"완료":"준비")+'</span></div>'+
       (b.메모?'<p class="plan">'+esc(b.메모)+'</p>':"")+'</div>';
-  }).join("") : '<div class="empty">등록된 생일이 없습니다.</div>';
+  }).join("") : emptyBox("🎂","등록된 생일이 없습니다.");
 
   var ms=DATA.회비.slice().sort(byDate), inS=0, outS=0;
   ms.forEach(function(m){ if(m.구분==="지출") outS+=wonNum(m.금액); else inS+=wonNum(m.금액); });
@@ -369,11 +445,12 @@ function renderRole(){
     var out=(m.구분==="지출");
     return '<div class="money '+(out?"out":"in")+'" data-edit="회비" data-id="'+esc(m.id)+'">'+
       '<span>'+esc(m.날짜)+' · '+esc(m.항목)+'</span>'+
-      '<b>'+(out?"-":"+")+won(m.금액)+'</b></div>';
-  }).join("") : '<p class="mini" style="padding:6px 0">기록이 없습니다.</p>';
+      '<b>'+(out?"−":"+")+won(m.금액)+'</b></div>';
+  }).join("") : '<p class="mini" style="padding:6px 0">아직 기록이 없습니다.</p>';
   $("#r-money").innerHTML='<div class="card">'+body+
-    '<div class="sum"><span>잔액</span><span>'+won(inS-outS)+'</span></div>'+
-    '<p class="mini">수입 '+won(inS)+' · 지출 '+won(outS)+'</p></div>';
+    '<div class="balance"><div class="l">현재 잔액</div>'+
+    '<div class="v">'+won(inS-outS)+'</div>'+
+    '<div class="m">수입 '+won(inS)+' · 지출 '+won(outS)+'</div></div></div>';
 }
 
 /* ══ 공지 ══ */
@@ -388,7 +465,7 @@ function renderNotice(){
     return (b.고정?1:0)-(a.고정?1:0) || String(b.작성일||"").localeCompare(String(a.작성일||""));
   });
   $("#n-list").innerHTML = ns.length ? ns.map(noticeCard).join("")
-    : '<div class="empty">등록된 공지가 없습니다.<br>위의 “공지 쓰기”를 눌러 보세요.</div>';
+    : emptyBox("📢","등록된 공지가 없습니다.<br>위의 “공지 쓰기”를 눌러 보세요.");
 }
 
 function renderAll(){ renderHome(); renderCal(); renderRole(); renderNotice(); }
@@ -441,8 +518,7 @@ document.addEventListener("click",function(e){
 $("#sh-ok").onclick=function(){
   var row={};
   $("#sh-body").querySelectorAll("[data-k]").forEach(function(el){ row[el.dataset.k]=el.value; });
-  if(cur.tab==="일정"&&!row.제목) return toast("제목을 적어 주세요");
-  if(cur.tab==="공지"&&!row.제목) return toast("제목을 적어 주세요");
+  if((cur.tab==="일정"||cur.tab==="공지")&&!row.제목) return toast("제목을 적어 주세요");
   if(cur.tab==="생일"&&!row.이름) return toast("이름을 적어 주세요");
   var b=$("#sh-ok"); b.disabled=true; b.textContent="저장 중…";
   send({tab:cur.tab, action:cur.id?"update":"add", id:cur.id, row:row})
@@ -462,6 +538,7 @@ $("#sh-del").onclick=function(){
 
 /* ══ 시작 ══ */
 try{ var c=localStorage.getItem("cell:data"); if(c){ DATA=JSON.parse(c); renderAll(); } }catch(e){}
+renderHome();
 if(API.indexOf("__API")===0){
   $("#sync").className="sync err";
   $("#sync").textContent="아직 구글 시트 주소가 연결되지 않았습니다.";
