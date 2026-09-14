@@ -17,6 +17,8 @@
     --f:"Pretendard","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
     --sh:0 1px 2px rgba(35,50,56,.04), 0 4px 14px rgba(35,50,56,.05);
   }
+  /* hidden 속성이 화면 배치 스타일보다 우선하도록 보장합니다. */
+  [hidden]{display:none!important}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;background:var(--paper);font-family:var(--f);
        background-image:radial-gradient(120% 55% at 50% -10%, #DCF2EE 0%, rgba(220,242,238,0) 62%);
